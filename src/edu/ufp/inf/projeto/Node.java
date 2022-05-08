@@ -16,6 +16,16 @@ public class Node {
     private long longitude;
     private int index;
 
+    private String type;
+    private Tags tag;
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public PointsOfInterest poi;
     //EdgeWeightedGraph node;
     //ArrayList<ArrayList<Node>> node = new ArrayList<ArrayList<Node>>();
@@ -68,6 +78,11 @@ public class Node {
         this.longitude = longitude;
         this.index = index;
     }
+
+    /**
+     * Adiciona um Node que proveio dum ficheiro
+     * @param n - Node
+     */
     public void addNodeFile(Node n){
         if(node.equals(n)){ // Verifica que o ID recebido do file se está ocupado
             System.out.println("O Node ja esta inserido.\n");
@@ -77,38 +92,42 @@ public class Node {
             node.addEdge(n.id, n.index);
         }
     }
-    public void addNode(){
-        Scanner read = new Scanner(System.in);
-        int id, index;
-        long longitude, latitude;
-        String nome, poi;
-        System.out.println("ID do node a inserir:");
-        id=read.nextInt(); // Le a linha com o ID inserido
+
+    /**
+     * Adiciona um Node
+     * @param id - ID do node
+     * @param longitude - Longitude do node
+     * @param latitude - Latitude do node
+     * @param nome - Nome dado ao node
+     * @param type - Tipo de node
+     */
+    public void addNode(int id,int index, long longitude, long latitude, String nome, String type){
         if(node.equals(id)){
             System.out.println("O ID inserido ja esta a ser usado\n");
             return;
         }
-        System.out.println("Index:");
-        index= Integer.parseInt(read.nextLine());
-        System.out.println("Longitude:");
-        longitude= Integer.parseInt(read.nextLine());
-        System.out.println("Latitude:");
-        latitude= Integer.parseInt(read.nextLine());
-        System.out.println("Nome:");
-        nome=read.nextLine();
-        System.out.println("Tipo de Ponto de Interesse:");
-        poi=read.nextLine();
         Node new_node = new Node(nome, id, latitude, longitude, index);
-        if(!node.equals(new_node)){ // Se não tiver a chave da nova cache, é inserida
+        if(!node.equals(new_node)){
+            new_node.tag.addTagNode(new_node, type); // Coloca o tipo de node que é.
             node.addEdge(new_node.id, new_node.index);
         }
     }
+
+    /**
+     * Remove um node
+     * @param n - Node a ser apagado
+     */
     public void removeNode(Node n){
         if(!node.equals(n)){
             System.out.println("Nao existe o node\n");
         } else{
         }
     }
+
+    /**
+     * Procura pelo node
+     * @param n - Node a ser procurado
+     */
     public void searchNode(Node n){
 
     }

@@ -17,9 +17,7 @@ public class User implements Register{
 
     private String type;
 
-    private int tag;
-
-    public HashMap<User, Integer> user = new HashMap<>(); // User e tag
+    public HashMap<User, Integer> user = new HashMap<>(); // User e ID
 
     public String getName() {
         return name;
@@ -53,13 +51,11 @@ public class User implements Register{
         this.type = type;
     }
 
-    public int getTag(){
-        return tag;
-    }
-    public void setTag(int tag){this.tag = tag;}
-    public User(String name, String type) {
+
+    private Tags tags;
+    public User(String name, int id) {
         this.name = name;
-        this.type = type;
+        this.id = id;
     }
 
     /**
@@ -82,24 +78,16 @@ public class User implements Register{
      * type - Tipo do utilizador (basico, premium, admistrador)
      * name - Nome do utilizador
      */
-    public void addUser(){
-        Scanner read = new Scanner(System.in);
-        int id;
-        String type;
-        String name;
-        System.out.println("Id do usuario a inserir:");
-        id=read.nextInt(); // Le a linha com o ID inserido
+    public void addUser(int id, String type, String name){
         if(user.containsValue(id)){ // Verifica se na BST o ID está inserido
             System.out.println("O ID inserido ja esta a ser usado para um usuario\n");
             return;
         }
-        System.out.println("Tipo de usuario a inserir (basico, premium ou admin):");
-        type=read.nextLine();
-        System.out.println("Nome do usuario:");
-        name=read.nextLine();
-        User new_user = new User(type, name);
+        User new_user = new User(name, id);
+
         if(!user.containsKey(new_user)){ // Se não tiver a chave da nova cache, é inserida
             user.put(new_user, new_user.getId());
+            tags.addTagUser(new_user,type);
         }
     }
 
@@ -107,12 +95,8 @@ public class User implements Register{
      * Remove o utilizador do HashMap<User, Integer> user
      * id - Numero do ID do utilizador
      */
-    public void removeUser(){
-        int id;
-        Scanner read = new Scanner(System.in);
+    public void removeUser(int id){
         Iterator<Map.Entry<User, Integer>> iterator = user.entrySet().iterator();
-        System.out.println("ID do usuario a remover:");
-        id=read.nextInt();
         while (iterator.hasNext()){ // Enquanto que houver valores no HashMap continuara a procurar
             Map.Entry<User, Integer> entry = iterator.next();
             if(id == entry.getValue()){ // O valor foi encontrado
@@ -127,8 +111,7 @@ public class User implements Register{
      * type - Tipo do utilizador (basico, premium, admistrador)
      * name - Nome do utilizador
      */
-    public void editUser(){
-        int id;
+    public void editUser(int id){
         String type;
         String name;
         Scanner read = new Scanner(System.in);
@@ -148,7 +131,7 @@ public class User implements Register{
                     name = read.nextLine();
                     type = this.type;
                     id = this.id;
-                    User edited_user = new User(type, name);
+                    User edited_user = new User(type, id);
                     user.put(edited_user, id);
                 }
                 case "2" -> {
@@ -156,13 +139,13 @@ public class User implements Register{
                     type = read.nextLine();
                     name = this.name;
                     id = this.id;
-                    User edited_user2 = new User(type, name);
+                    User edited_user2 = new User(type, id);
                     user.put(edited_user2, id);
                 }
             }
         }
     }
-    public void readFile(){
+    /*public void readFile(){
         try {
             File myObj = new File("filename.txt");
             Scanner myReader = new Scanner(myObj);
@@ -175,7 +158,12 @@ public class User implements Register{
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-    }
+    }*/
+
+    /**
+     * Procura o Usuario
+     * @param u - User
+     */
     public void searchUser(User u){
         if(user.containsKey(u)){
             System.out.println("Esta contido na lista de usuarios\n");
